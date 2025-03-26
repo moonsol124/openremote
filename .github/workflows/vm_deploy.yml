@@ -1,0 +1,26 @@
+name: CI/CD Pipeline for VM Deployment
+
+on:
+  push:
+    branches:
+      - master  # You can replace 'main' with your desired branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up SSH for accessing the VM
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.OPENREMOTESECRET }}
+        
+      # Deploy to VM (replace with your own deploy script)
+      - name: Deploy to VM
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'cd /s6/openremote && git pull && cd /ui/app/manager && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
