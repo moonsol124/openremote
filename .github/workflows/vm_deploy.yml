@@ -20,6 +20,13 @@ jobs:
         with: 
           ssh-private-key: ${{ secrets.OPENREMOTESECRET }}
          
+      - name: Install Node.js
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          node -v
+          npm -v
+          
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
         run: |
