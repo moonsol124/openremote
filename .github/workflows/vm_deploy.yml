@@ -26,7 +26,16 @@ jobs:
           sudo apt-get install -y nodejs
           node -v
           npm -v
-          
+
+      - name: Clean and Reinstall Dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.IP }} "bash -l -c '
+          cd /s6/openremote/ui/app/manager &&
+          rm -rf node_modules package-lock.json &&
+          npm cache clean --force &&
+          npm install &&
+          npm run build'"
+
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
         run: |
