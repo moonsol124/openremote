@@ -37,6 +37,6 @@ jobs:
             git reset --hard origin/master &&
             git pull &&
             cd ui/app/manager &&
-            docker ps &&
+            docker ps && node -v &&
             npm run serve -- --env managerUrl=http://13.74.121.139:8080'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
