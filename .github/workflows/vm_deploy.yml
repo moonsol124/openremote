@@ -22,14 +22,21 @@ jobs:
          
       - name: Install Node.js
         run: |
+          # Install Node.js 18
           curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
           sudo apt-get install -y nodejs
           node -v
           npm -v
 
-      # Deploy to VM (replace with your own deploy script)
-      - name: Deploy to VM
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'node -v && dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && npm run serve -- --env managerUrl=http://13.74.121.139:8080'
-
+          # Deploy to VM
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} '
+            node -v &&
+            dir &&
+            cd s6/openremote &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git pull &&
+            cd ui/app/manager &&
+            docker ps &&
+            npm run serve -- --env managerUrl=http://13.74.121.139:8080'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
