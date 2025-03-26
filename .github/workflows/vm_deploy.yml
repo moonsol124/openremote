@@ -38,7 +38,7 @@ jobs:
           npm -v && 
           git reset --hard origin/master &&
           git pull && 
-          cd ui/app/manager && 
+          cd ui/app/manager &&  
           docker ps && 
           nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
 
