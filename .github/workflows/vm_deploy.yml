@@ -17,7 +17,7 @@ jobs:
       # Set up SSH for accessing the VM
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
-        with:
+        with: 
           ssh-private-key: ${{ secrets.OPENREMOTESECRET }}
          
       # Deploy to VM (replace with your own deploy script)
