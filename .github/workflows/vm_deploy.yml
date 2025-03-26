@@ -29,7 +29,29 @@ jobs:
 
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'node -v && dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && npm run serve -- --env managerUrl=http://13.74.121.139:8080'
+  run: |
+    ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} << 'EOF'
+      # Install NVM (Node Version Manager)
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+      # Load NVM script (this ensures nvm is available in the current session)
+      . "$HOME/.nvm/nvm.sh"
+      
+      # Install Node.js version 23 using NVM
+      nvm install 23
+      nvm use 23
 
+      # Verify the Node.js version
+      node -v
+      nvm current
+      npm -v
+
+      # Continue with the rest of the deployment process
+      cd s6/openremote
+      git fetch --all
+      git reset --hard origin/master
+      git pull
+      cd ui/app/manager
+      docker ps
+      npm run serve -- --env managerUrl=http://13.74.121.139:8080
+    EOF
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
