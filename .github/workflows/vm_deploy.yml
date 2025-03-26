@@ -23,6 +23,6 @@ jobs:
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && npm run serve -- --env managerUrl=http://13.74.121.139:8080
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && npm run serve -- --env managerUrl=http://13.74.121.139:8080'
 
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
