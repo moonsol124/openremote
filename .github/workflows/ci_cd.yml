@@ -58,7 +58,7 @@ on:
   # Push on master excluding tags
   push:
     branches:
-      - 'master'
+      - ''
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
 
