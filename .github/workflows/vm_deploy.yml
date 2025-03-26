@@ -27,16 +27,6 @@ jobs:
           node -v
           npm -v
 
-      - name: Clean and Reinstall Dependencies
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.IP }} << 'EOF'
-            cd /s6/openremote/ui/app/manager
-            rm -rf node_modules package-lock.json
-            npm cache clean --force
-            npm install
-            npm run build
-          EOF
-
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
         run: |
