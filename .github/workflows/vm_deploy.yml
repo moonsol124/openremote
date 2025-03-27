@@ -30,12 +30,8 @@ jobs:
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'bash -c '"'"'
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash && 
-          \. "$HOME/.nvm/nvm.sh" && 
-          dir && 
-          cd s6/openremote && 
-          git fetch --all &&
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash && 
+          \. "$HOME/.nvm/nvm.sh" && dir && cd s6/openremote && git fetch --all &&
           nvm install 23 &&
           node -v &&
           nvm current &&
@@ -60,23 +56,23 @@ jobs:
             echo "Port $PORT is not in use."
           fi
 
-          OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
-          docker ps && 
+          echo "Starting docker-compose..."
+          OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d
+
+          # Wait for all containers to be fully up and healthy
+          echo "Waiting for all containers to be fully started..."
+          while [[ $(docker-compose -f profile/dev-ui.yml ps --services --filter "status=running" | wc -l) -lt $(docker-compose -f profile/dev-ui.yml ps --services | wc -l) ]]; do
+            echo "Waiting for containers..."
+            sleep 5
+          done
+
+          echo "All containers are up and running."
+          echo "Will cd to ui/app/manager.." && 
           cd ui/app/manager &&
-          nohup npm run serve -- --env managerUrl=http://13.74.121.139:8080 > output.log 2>&1 & 
-          
-          # Wait a moment to ensure the process starts
-          sleep 5
-          
-          # Check if the process is running
-          if ps aux | grep "npm run serve" | grep -v grep > /dev/null; then
-            echo "npm serve process started successfully"
-          else
-            echo "Failed to start npm serve process"
-            exit 1
-          fi
-          
-          echo "Script done"
-          '"'"
+          echo "will run serve."
+          setsid npm run serve -- --env managerUrl=http://13.74.121.139:8080 > output.log 2>&1 & exit 0'
+
 #ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
+#OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
+          
