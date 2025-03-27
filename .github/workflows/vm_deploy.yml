@@ -40,10 +40,10 @@ jobs:
           git pull && 
           docker stop $(docker ps -q) &&
           docker rm $(docker ps -aq) &&
-          OR_HOSTNAME={{ secrets.IP }} docker-compose -f profile/dev-ui.yml up -d &&
+          OR_HOSTNAME=${{ secrets.IP }} docker-compose -f profile/dev-ui.yml up -d &&
           cd ui/app/manager &&  
           docker ps &&
-          nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &' 
+          nohup npm run serve -- --env managerUrl=${{ secrets.IP }}:8080 &> output.log &' 
 
 #ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
