@@ -38,8 +38,8 @@ jobs:
           npm -v && 
           git reset --hard origin/master &&
           git pull && 
-          docker stop $(docker ps -q) &&
-          docker rm $(docker ps -aq) &&
+          docker ps -q | grep . && docker stop $(docker ps -q) || echo "No running containers to stop" &&
+          docker ps -aq | grep . && docker rm $(docker ps -aq) || echo "No containers to remove" &&
           OR_HOSTNAME=${{ secrets.IP }} docker-compose -f profile/dev-ui.yml up -d &&
           cd ui/app/manager &&  
           docker ps &&
