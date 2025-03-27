@@ -7,7 +7,7 @@ export function headerItemMap<S extends AppStateKeyed, A extends AnyAction>(orAp
     return {
         icon: "map",
         href: getMapRoute(),
-        text: "mapasd this is some test.. asd."
+        text: "mapasd...."
     };
 }
 
