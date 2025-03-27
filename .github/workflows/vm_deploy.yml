@@ -41,7 +41,7 @@ jobs:
           docker ps -q | grep . && docker stop $(docker ps -q) || echo "No running containers to stop" &&
           docker ps -aq | grep . && docker rm $(docker ps -aq) || echo "No containers to remove" &&
           OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
-          docker ps &&
+          docker ps && 
           cd ui/app/manager &&   
           npm run serve -- --env managerUrl=http://13.74.121.139:8080'
 
