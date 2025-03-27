@@ -38,10 +38,12 @@ jobs:
           npm -v && 
           git reset --hard origin/master &&
           git pull && 
-          docker-compose -f profile/dev-ui.yml up -d &&
+          docker stop $(docker ps -q) &&
+          docker rm $(docker ps -aq) &&
+          OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
           cd ui/app/manager &&  
           docker ps &&
-          npm run serve -- --env managerUrl=http://13.74.121.139:8080 keycloakUrl=https://13.74.121.139:8081' 
+          npm run serve -- --env managerUrl=http://13.74.121.139:8080' 
 
 #ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
