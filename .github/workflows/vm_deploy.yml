@@ -55,7 +55,6 @@ jobs:
           else
             echo "Port $PORT is not in use."
           fi
-          &&
 
           OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
           docker ps && 
