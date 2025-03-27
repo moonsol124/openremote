@@ -44,8 +44,11 @@ jobs:
           docker ps && 
           cd ui/app/manager &&
           nohup npm run serve -- --env managerUrl=http://13.74.121.139:8080 > output.log 2>&1 < /dev/null &
+          echo \"Deployment complete! GitHub Actions can exit now.\"
+
+          # Ensure SSH session exits immediately
+          nohup exit 0 >/dev/null 2>&1 &
           disown
-          echo "Deployment complete! GitHub Actions can exit now."
           exit 0' 
 
 #ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
