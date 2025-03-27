@@ -36,7 +36,7 @@ jobs:
           node -v &&
           nvm current &&
           npm -v && 
-          git reset --hard origin/master &&
+          git reset --hard origin/master && 
           git pull && 
           docker ps -q | grep . && docker stop $(docker ps -q) || echo "No running containers to stop" &&
           docker ps -aq | grep . && docker rm $(docker ps -aq) || echo "No containers to remove" &&
