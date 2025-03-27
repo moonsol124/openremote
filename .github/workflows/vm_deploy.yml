@@ -29,9 +29,13 @@ jobs:
 
       # Deploy to VM (replace with your own deploy script)
       - name: Deploy to VM
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash && 
-          \. "$HOME/.nvm/nvm.sh" && dir && cd s6/openremote && git fetch --all &&
+run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'bash -c '"'"'
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash && 
+          \. "$HOME/.nvm/nvm.sh" && 
+          dir && 
+          cd s6/openremote && 
+          git fetch --all &&
           nvm install 23 &&
           node -v &&
           nvm current &&
@@ -59,8 +63,20 @@ jobs:
           OR_HOSTNAME=13.74.121.139 docker-compose -f profile/dev-ui.yml up -d &&
           docker ps && 
           cd ui/app/manager &&
-          setsid npm run serve -- --env managerUrl=http://13.74.121.139:8080 > output.log 2>&1 & exit echo "Script done" &&
-          echo "Script done"'
-
+          nohup npm run serve -- --env managerUrl=http://13.74.121.139:8080 > output.log 2>&1 & 
+          
+          # Wait a moment to ensure the process starts
+          sleep 5
+          
+          # Check if the process is running
+          if ps aux | grep "npm run serve" | grep -v grep > /dev/null; then
+            echo "npm serve process started successfully"
+          else
+            echo "Failed to start npm serve process"
+            exit 1
+          fi
+          
+          echo "Script done"
+          '"'"
 #ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} 'dir && cd s6/openremote && git fetch --all && git reset --hard origin/master && git pull && cd ui/app/manager && docker ps && nohup npm run serve -- --env managerUrl={{ secrets.IP }}:8080 &> output.log &'
 #npm run serve -- --env managerUrl={{ secrets.IP }}:8080
